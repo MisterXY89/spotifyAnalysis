@@ -13,17 +13,23 @@
       Your {{ type }} has a valence of: <code>{{ valence }}</code>.
     </p>
   {% endif %}
-  {% if sentiment is defined %}
-    <p class="_high text-center">
-      Your {{ type }} has a compound seniment score of: <code>{{ sentiment["compound"] }}</code>.
-    </p>
+
+  {% if showSent is sameas True %}
+    {% if sentiment is defined %}
+      <p class="_high text-center">
+        Your {{ type }} has a compound seniment score of: <code>{{ sentiment["compound"] }}</code>.
+      </p>
+    {% endif %}
+  {% else %}
+  <p class="_high text-center">
+      <b>No lyrics could be found for your track!</b>
+  </p>
   {% endif %}
 </div>
 {% endblock %}
 {% block content %}
-
   <div class="row margin">
-
+    {% if showSent is sameas True %}
     {% if sentiment is defined %}
       <h2>Sentiment analysis results</h2>
       <table>
@@ -88,6 +94,7 @@
         this <a href="https://medium.com/analytics-vidhya/simplifying-social-media-sentiment-analysis-using-vader-in-python-f9e6ec6fc52f" target="_blank">article on Medium</a>
         or the <a href="https://github.com/MisterXY89/spotifyAnalysis" target="_blank">GitHub repository</a> for this project.
       </p>
+    {% endif %}
     {% endif %}
 
     {% if valence is defined %}

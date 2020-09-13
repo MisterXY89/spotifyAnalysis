@@ -1,6 +1,7 @@
 
 import pickle
 import lyricwikia
+from PyLyrics import *
 from libinit import reader_
 
 class Lyrics:
@@ -22,6 +23,12 @@ class Lyrics:
     def getLyricsForSong(self, song, artist):
         print("artist: %s | song: %s" %(artist, song))
         lyrics = lyricwikia.get_lyrics(artist, song, self.linesep)
+        return lyrics
+
+
+    def getLyrics(self, song, artist):
+        lyrics = PyLyrics.getLyrics(artist, song)
+        print(lyrics)
         return lyrics
 
     def getLyricsForYear(self, year):

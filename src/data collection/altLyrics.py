@@ -5,12 +5,12 @@ from lyricsmaster import Genius, LyricWiki, AzLyrics, Lyrics007, MusixMatch, Tor
 class LyricsCollection:
     def __init__(self):
         self.allSongs = reader_.readSongs()
-        self.provider = LyricWiki()
+        self.provider = Lyrics007()
         self.error = []
 
 
     def cleanSong(self, song):
-        return "".join([char for char in song if char.isalpha()])
+        return "".join([char for char in song if char.isalpha() and char == " "])
 
 
     # replace all line breaks with ;
@@ -22,8 +22,10 @@ class LyricsCollection:
         success = False
         searchSong = title
         artist = artist
-        searchSongClean = self.cleanSong(searchSong)
+        # searchSongClean = self.cleanSong(searchSong)
+        # print(f"{searchSongClean=}")
         lyricsResult = self.provider.get_lyrics(artist, song=searchSong)
+        print(f"{lyricsResult=}")
         for album in lyricsResult.albums:
             for song in album.songs:
                 if(self.cleanSong(song.title) == searchSongClean):

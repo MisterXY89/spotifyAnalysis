@@ -64,24 +64,38 @@ def analyseGet():
 
 @app.route("/songAnalyse", methods=["POST"])
 def songAnalysePost():
+    showSent = False;
+    sent = False
     if "trackURI" in request.form:
         uri = request.form["trackURI"]
         trackInfo = spotifyData.SpotifyData(session["spotifyAccessToken"]).getSongInfo(uri)
         trackName = trackInfo["trackName"]
         artistName = trackInfo["artistName"]
-        if "analyseLyrics" in request.form and bool(request.form["analyseLyrics"]):
-            lyrics = lyrics_.getLyricsForSong(trackName, artistName)
-            if lyrics:
-                lyrics = altLyrics_.prepLyricsForSave(lyrics)
-                sent = sentimentAnalyzer_.songSent({
-                    "track": trackName,
-                    "artist": artistName,
-                    "lyrics": lyrics
-                })
-        valence = spotifyData.SpotifyData(session["spotifyAccessToken"]).getBasicValence([uri])
-        print(valence)
+        print(request.form["analyseLyrics"])
+        if "analyseLyrics" in request.form and request.form["analyseLyrics"] == "on":
+            try:
+                lyrics = altLyrics_.lyricsForSong(trackName, artistName)
+                # lyrics = lyrics_.getLyricsForSong(trackName, artistName)
+                # lyrics = lyrics_.getLyrics(trackName, artistName)
+                if lyrics:
+                    lyrics = altLyrics_.prepLyricsForSave(lyrics)
+                    sent = sentimentAnalyzer_.songSent({
+                        "track": trackName,
+                        "artist": artistName,
+                        "lyrics": lyrics
+                    })
+                    showSent = True
+                else:
+                    sent = "Lyrics not found"
+                    showSent = False
+            except Exception as e:
+                print("ERROR")
+                sent = "Lyrics not found"
+                showSent = False
 
-    return redirect(url_for("songAnalyseOutput", sentiment=sent, valence=valence, trackInfo=trackInfo))
+        valence = spotifyData.SpotifyData(session["spotifyAccessToken"]).getBasicValence([uri])
+
+    return redirect(url_for("songAnalyseOutput", showSent=showSent, sentiment=sent, valence=valence, trackInfo=trackInfo))
 
 @app.route("/songAnalyse", methods=["GET"])
 def songAnalyse():
@@ -91,10 +105,17 @@ def songAnalyse():
 @app.route("/songAnalyseOutput")
 def songAnalyseOutput():
     args = request.args
+    showSent = args["showSent"]
+    if showSent == "True":
+        showSent = True
+    else:
+        showSent = False
     if "sentiment" in args:
         sentiment = args["sentiment"]
         sentiment = sentiment.replace("\'", "\"")
-        sentiment = json.loads(sentiment)
+        if showSent:
+            sentiment = json.loads(sentiment)
+            showSent = False
     else:
         sentiment = False
     if "trackInfo" in request.args:
@@ -113,12 +134,13 @@ def songAnalyseOutput():
             emotion = "happy"
         else:
             emotion = "sad"
-    if sentiment:
+    if sentiment and type(sentiment) != str:
         if float(sentiment["compound"]) > 0:
-            emotion+= " & happy lyrics"
+            emotion += " & happy lyrics"
         else:
-            emotion+= " & sad/negative lyrics"
-        return render_template("result.html", valence=valence, type="track", sentiment=sentiment, name=trackInfo["trackName"], artist=trackInfo["artistName"], emotion=emotion, imgUrl=trackInfo["imgUrl"], isTrack=True)
+            emotion += " & sad/negative lyrics"
+
+    return render_template("result.html", showSent=showSent, valence=valence, type="track", sentiment=sentiment, name=trackInfo["trackName"], artist=trackInfo["artistName"], emotion=emotion, imgUrl=trackInfo["imgUrl"], isTrack=True)
     # return jsonify({
     #     "sentimentData": sentiment,
     #     "valence": valence

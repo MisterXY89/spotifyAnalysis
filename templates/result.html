@@ -2,7 +2,12 @@
 {% block header %}
 <div class="jumbo">
   <h1>Your {{ type }} seems to be {{ emotion }}</h1>
-  <h2 class="playlistName"> - {{ name }} - </h2>
+  {% if imgUrl is defined %}
+  <div class="text-center">
+    <img src="{{ imgUrl }}" alt="{{ type }} cover" align="center">
+  </div>
+  {% endif %}
+  <h2 class="playlistName trackName"> - {{ name }} by {{ artist }}- </h2>
   {% if valence is defined %}
     <p class="_high text-center">
       Your {{ type }} has a valence of: <code>{{ valence }}</code>.
@@ -36,14 +41,52 @@
                   {{ sentiment["pos"] }}
                 </td>
                 <td>
-                  expl
+                  What proportion of text that falls in the positve category.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                  negative
+                </td>
+                <td>
+                  {{ sentiment["neg"] }}
+                </td>
+                <td>
+                  What proportion of text that falls in the negative category.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                  neutral
+                </td>
+                <td>
+                  {{ sentiment["neu"] }}
+                </td>
+                <td>
+                  What proportion of text that falls in the neutral category.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                  compound
+                </td>
+                <td>
+                  {{ sentiment["compound"] }}
+                </td>
+                <td>
+                  The Compound score is a metric that calculates the sum of all
+                  the lexicon ratings which have been normalized between
+                  -1(most extreme negative) and +1 (most extreme positive).
                 </td>
             </tr>
         </tbody>
       </table>
       <p>
-        I used the <code>vader_lexicon</code> and the <code>SentimentIntensityAnalyzer</code> from the nltk python package. The results are the <code>polarity_scores</code>.
-        For more detais have a look at the <a href="">official docs</a> or have a look the <a href="#TODO_github_public">GitHub repository</a>.
+        I used the <code>vader_lexicon</code> and the <code>SentimentIntensityAnalyzer</code>
+        from the nltk python package. The results are the <code>polarity_scores</code>.
+        For more details have a look at the <a href="https://github.com/cjhutto/vaderSentiment" target="_blank">GitHub repo</a>,
+        this <a href="https://medium.com/analytics-vidhya/simplifying-social-media-sentiment-analysis-using-vader-in-python-f9e6ec6fc52f" target="_blank">article on Medium</a>
+        or the <a href="https://github.com/MisterXY89/spotifyAnalysis" target="_blank">GitHub repository</a> for this project.
       </p>
     {% endif %}
 
@@ -76,9 +119,9 @@
           </li>
       </ul>
 
-      <h2>Further reading</h2>
+      <!-- <h2>Further reading</h2> -->
       <!-- TODO: add paper -->
-      <h3>Valence</h3>
+      <!-- <h3>Valence</h3>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </p>
@@ -86,17 +129,24 @@
       <h3>Music and emotions</h3>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
+      </p> -->
     {% else %}
       <h2>Something went wrong :/</h2>
     {% endif %}
 
   </div>
 
-  <h2 class="">
-    Want to analyse another playlist?
-  </h2>
-  {% include "includes/analyseInput.html" %}
+  {% if isTrack %}
+    <h2 class="">
+      Want to analyse another track?
+    </h2>
+  {% include "includes/songAnalyseInput.html" %}
+  {% else %}
+    <h2 class="">
+      Want to analyse another playlist?
+    </h2>
+    {% include "includes/analyseInput.html" %}
+  {% endif %}
 
 
 {% endblock %}

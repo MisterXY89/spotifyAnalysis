@@ -63,7 +63,8 @@ class SpotifyData:
         return {
             "trackName": info["name"],
             "artistName": info["artists"][0]["name"],
-            "albumName": info["album"]["name"]
+            "albumName": info["album"]["name"],
+            "imgUrl": info["album"]["images"][1]["url"]
         }
 
     def _makePages(self, pls):

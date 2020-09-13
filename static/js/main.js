@@ -60,6 +60,7 @@ function generateHtmlForDisplay(item) {
 function displayQueryResults(json) {
   const queryResultTable = document.getElementById("queryResultTable");
   const queryResults = document.getElementById("queryResults");
+	queryResults.innerHTML = "";
   json.forEach(item => {
     queryResults.innerHTML += generateHtmlForDisplay(item);
   });

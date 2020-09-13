@@ -1,5 +1,5 @@
 <form action="/songAnalyse" method="post" id="trackAnalyseForm" name="trackAnalyseForm">
-<div class="row">
+  <div class="row">
 
     <div class="col m12">
       <label for="trackURI">Enter a Spotify track URI or a song title to search for</label>
@@ -18,3 +18,15 @@
     </div>
   </div>
 </form>
+
+<table id="queryResultTable" style="display: none; margin: auto;">
+  <thead>
+    <th>~</th>
+    <th>Track</th>
+    <th>Artist</th>
+    <th>Album</th>
+    <th>~</th>
+  </thead>
+  <tbody id="queryResults">
+  </tbody>
+</table>

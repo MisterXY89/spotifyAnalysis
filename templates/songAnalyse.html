@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="jumbo _white">
+  <h1>Is my music sad?</h1>
+  <p>
+    Let's find out!
+    Paste the spotify URI of a song or search. <br />
+    <b>
+      The song analys feature enables you to take song lyrics in account.
+    </b>
+  </p>
+  <div class="container">
+    {% include "includes/songAnalyseInput.html" %}
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+
+<table id="queryResultTable" style="display: none; margin: auto;">
+  <thead>
+    <th>~</th>
+    <th>Track</th>
+    <th>Artist</th>
+    <th>Album</th>
+    <th>~</th>
+  </thead>
+  <tbody id="queryResults">
+  </tbody>
+</table>
+
+{% endblock %}

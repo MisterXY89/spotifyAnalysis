@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="jumbo">
+  <h1>Your {{ type }} seems to be {{ emotion }}</h1>
+  <h2 class="playlistName"> - {{ name }} - </h2>
+  {% if valence is defined %}
+    <p class="_high text-center">
+      Your {{ type }} has a valence of: <code>{{ valence }}</code>.
+    </p>
+  {% endif %}
+  {% if sentiment is defined %}
+    <p class="_high text-center">
+      Your {{ type }} has a compound seniment score of: <code>{{ sentiment["compound"] }}</code>.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}
+{% block content %}
+
+  <div class="row margin">
+
+    {% if sentiment is defined %}
+      <h2>Sentiment analysis results</h2>
+      <table>
+        <thead>
+          <th>Type</th>
+          <th>Score</th>
+          <th>What does this mean</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                  positve
+                </td>
+                <td>
+                  {{ sentiment["pos"] }}
+                </td>
+                <td>
+                  expl
+                </td>
+            </tr>
+        </tbody>
+      </table>
+      <p>
+        I used the <code>vader_lexicon</code> and the <code>SentimentIntensityAnalyzer</code> from the nltk python package. The results are the <code>polarity_scores</code>.
+        For more detais have a look at the <a href="">official docs</a> or have a look the <a href="#TODO_github_public">GitHub repository</a>.
+      </p>
+    {% endif %}
+
+    {% if valence is defined %}
+      <h2>What is the valence of a track?</h2>
+      <blockquote cite="https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/">
+        <p>
+          A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track.
+          Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).<br />
+          <a title="Spotify WEB API Doc" target="_blank" href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/">
+            <cite title="Spotify WEB API documentation">Spotify WEB API documentation</cite>
+          </a>
+
+        </p>
+      </blockquote>
+
+      <p class="_high">
+        It can be said, that a valence score &gt; 0.52 indicates more positive emotions,
+        a score &lt; 0.48 indicates rather negative emotions associated with the track(s). <br />
+        For a score inbetween it is hard to say which emotions the listener feels, so I call them simply mixed.
+      </p>
+
+      <h2>A reference</h2>
+      <ul>
+          <li>
+            <a title="Opens spotify" target="_blank" href="https://open.spotify.com/track/4lCv7b86sLynZbXhfScfm2?si=IRS6_aw-QBm9vmJm_GZ8XA">Firework</a> by Katy Perry has a valence scory of <code>0.649</code>
+          </li>
+          <li>
+            <a title="Opens spotify" target="_blank" href="https://open.spotify.com/track/3JvKfv6T31zO0ini8iNItO?si=qjNebHa7Q8qyUXHE494cig">Another Love</a> by Tom Odell has a valence score of <code>0.131</code>
+          </li>
+      </ul>
+
+      <h2>Further reading</h2>
+      <!-- TODO: add paper -->
+      <h3>Valence</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+
+      <h3>Music and emotions</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+    {% else %}
+      <h2>Something went wrong :/</h2>
+    {% endif %}
+
+  </div>
+
+  <h2 class="">
+    Want to analyse another playlist?
+  </h2>
+  {% include "includes/analyseInput.html" %}
+
+
+{% endblock %}

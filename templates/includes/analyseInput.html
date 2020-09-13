@@ -1,0 +1,68 @@
+<div class="row">
+  <form action="/analyse" method="post" id="playlistAnalyseForm" name="playlistAnalyseForm">
+
+    <div class="col m12">
+      <label for="playlistURI">Enter a Spotify playlist or track URI</label>
+      <input class="_full-width" type="text" placeholder="spotify:playlist:4s1VbUoo1Oi9rOU6Raj3pW" name="playlistURI" id="playlistURI" pattern=".*(spotify).+(track|playlist).+" title="URI must be of type playlist or track" required>
+    </div>
+
+    <div class="text-center">
+      <button class="_box" type="submit">Analyse</button>
+    </div>
+  </form>
+
+    {% if showPlaylists is defined %}
+      {% if pagination is defined %}
+        <div class="tab">
+          {% for page in pages %}
+            <button class="tablinks" onclick="opentab('tab{{ page['nr'] }}')">Page {{ page["nr"] }}</button>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% for page in pages %}
+        <div id="tab{{ page['nr'] }}" class="tabcontent">
+          <table>
+            <thead>
+              <th>
+                Playlist
+              </th>
+              <th>
+                Total
+              </th>
+              <th>
+                Link
+              </th>
+              <th>
+                Owner
+              </th>
+              <th>
+                Action
+              </th>
+            </thead>
+            <tbody>
+              {% for playlist in page["playlists"] %}
+                <tr>
+                    <td>
+                        {{ playlist["name"] }}
+                    </td>
+                    <td>
+                        {{ playlist["tracks"]["total"] }}
+                    </td>
+                    <td>
+                        <a href='{{ playlist["external_urls"]["spotify"] }}' title="Opens Spotify" target="_blank">Open with Spotify</a>
+                    </td>
+                    <td>
+                        {{ playlist["owner"]["display_name"] }}
+                    </td>
+                    <td>
+                        <button type="button" name="analyseUserPlaylistButton" class="_success button analyseUserPlaylistButton" id='{{ playlist["uri"] }}'>Analyse</button>
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+  {% endif %}
+</div>

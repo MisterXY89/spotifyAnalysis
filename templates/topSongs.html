@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="jumbo _white">
+  <h1>Here are <span id="playlistTitle">your top songs from {{ timespan }}!</span></h1>
+</div>
+{% endblock %}
+{% block content %}
+
+
+<form class="" action="" method="GET">
+  <div class="row">
+    <div class="col m6 s12">
+      <label for="time_range">Change the time range:</label>
+      <select class="_width100" id="time_range" name="time_range" required>
+        <option value="short_term" selected>30 days</option>
+        <option value="medium_term">6 months</option>
+        <option value="long_term">overall</option>
+      </select>
+    </div>
+    <div class="col m6 s12">
+      <label for="limit">How much songs do you want to display</label>
+      <input class="_full-width" type="number" value="10" required id="limit" name="limit" max="100" min="2">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button class="_box _success" type="submit">Fetch songs</button>
+    </div>
+  </div>
+</form>
+<hr>
+<div class="row text-center">
+  <div class="col">
+    <button class="_box _primary" type="button" id="createPlaylist">Create playlist</button>
+    <button class="_box _purple" type="button" id="analyse" title="analyse the emotions of the songs">Analyse</button>
+  </div>
+</div>
+<div class="row">
+  <h2 class="text-center" id="analyseResultSpan">
+  </h2>
+</div>
+
+<hr />
+
+{% include "includes/songDisplay.html" %}
+
+<div id="snack" class="snackbar _primary _box _shadow"></div>
+
+<script type="text/javascript">
+
+  let analyseResultSpan = document.getElementById("analyseResultSpan");
+
+  function analyseTracks(trackIds) {
+    fetch("/analyse", {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        trackIds : trackIds
+      })
+    })
+    .then(response => {
+      analyseResultSpan.innerHTML = "You can find your results <a href='" + response.url + "' target='blank_'>here</a>!";
+    });
+  }
+
+
+  function addTracksToPlaylistFetchCall(playlistURI, trackIds) {
+    fetch("/addTracksToPlaylist", {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        playlistURI : playlistURI,
+        trackIds    : trackIds
+      })
+    })
+    .then(response => {
+      console.log(response);
+    });
+  }
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    setDefaults();
+
+    let snack = document.getElementById("snack");
+    let analyseBtn = document.getElementById("analyse");
+    let createPlaylistBtn = document.getElementById("createPlaylist");
+
+    createPlaylistBtn.addEventListener("click", function() {
+      let playlistTitle = document.getElementById("playlistTitle").textContent;
+      fetch("/createPlaylist?name="+playlistTitle)
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        if (json.uri != undefined && json.uri != "" && json.url != undefined && json.url != "") {
+          createPlaylistBtn.classList.add("_disabled");
+          snack.innerHTML = "Playlist created!";
+          // ----------------------------------------------
+          let uri = json.uri;
+          let trackIds = Array.from(document.getElementsByClassName("song")).map(item => item.id);
+          addTracksToPlaylistFetchCall(uri, trackIds);
+        } else {
+          snack.innerHTML = "Something went wrong :/ Please reload the site and try again. If it still does not work open an issue @GitHub (see footer section)";
+        }
+        showsnackbar('snack');
+      });
+    });
+
+    analyseBtn.addEventListener("click", function() {
+      let trackIds = Array.from(document.getElementsByClassName("song")).map(item => item.id);
+      analyseTracks(trackIds);
+    });
+  });
+
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Is My Music Sad</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+	<!-- BEAUTER CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/beauter.min.css') }}">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body class="{{ cssClass }}">
+	{% include "includes/nav.html" %}
+	{% block header %}
+	{% endblock %}
+	<div class="container content">
+		{% block content %}
+		{% endblock %}
+	</div>
+
+  {% include "includes/footer.html" %}
+  <!-- BEAUTER JS -->
+	<script type="text/javascript" src="{{ url_for('static', filename='js/beauter.min.js') }}"></script>
+	<!-- Custom JS -->
+	<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+	{% if login is defined %}
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", (event) => {
+		showsnackbar('loggedInBar');
+	});
+	</script>
+	{% endif %}
+	{% if pagination is defined %}
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", (event) => {
+		opentab('tab1');
+	});
+	</script>
+	{% endif %}
+</body>
+</html>

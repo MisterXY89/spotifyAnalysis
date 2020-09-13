@@ -1,0 +1,34 @@
+
+<div>
+    {% for song in songs %}
+    <div class="row song" id="{{ song['id'] }}">
+      <div class="col m3 albumIMG">
+        <img src="{{ song['album']['images'][1]['url'] }}" align="center" alt="{{ song['album']['name'] }} album cover" width="100%">
+		  </div>
+      <div class=" col m7 track">
+        <div class="row trackName">
+          {{ song["name"] }}
+          <span class="albumName">
+            {{ song["album"]["name"] }}
+          </span>
+        </div>
+        <div class="row artistName">
+           {{ song["artists"][0]["name"] }}
+        </div>
+        {% if song["val"] is defined %}
+          <div class="row">
+            Valence: {{ song["val"] }}
+          </div>
+        {% endif %}
+        <div class="row" style="height: 30px;"></div>
+        <div class="row">
+          <!-- getPlayerHtml(prev_url, artist, name, imgSrc) -->
+          <audio controls="controls" width="100">
+            <source src="{{ song['preview_url'] }}" type="audio/mpeg">
+              Your browser does not support the audio tag. Consider updating.
+            </audio>
+        </div>
+      </div>
+    </div>
+     {% endfor %}
+</div>

@@ -1,0 +1,20 @@
+<form action="/songAnalyse" method="post" id="trackAnalyseForm" name="trackAnalyseForm">
+<div class="row">
+
+    <div class="col m12">
+      <label for="trackURI">Enter a Spotify track URI or a song title to search for</label>
+      <input class="_full-width" type="text" placeholder="spotify:track:4s1VbUoo1Oi9rOU6Raj3pW" name="trackURI" id="trackURI" pattern=".*(spotify).+(track).+" title="URI must be of type track" required>
+    </div>
+    <div class="col m12">
+      <div class="row">
+        <label for="analyseLyrics">Analyse Lyrics</label>
+        <input type="checkbox" checked="checked" name="analyseLyrics" id="analyseLyrics">
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button class="_box _success" type="button" id="searchSong">Search</button>
+      <button class="_box" type="submit">Analyse</button>
+    </div>
+  </div>
+</form>

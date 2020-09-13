@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="jumbo _white">
+  <h1>Is my music sad?</h1>
+  <p>
+    Let's find out!
+    Paste the <abbr title="Uniform Resource Indicator for the spotify playlist or track. Can be found in the share menu.">Spotify URI</abbr> or playlist/track link in the input field an click analyse! <br />
+    <strong>Or choose one of your playlists from the list below!</strong>
+  </p>
+  <div class="row margin">
+    <div class="col">
+      <img src="{{ url_for('static', filename='img/howto.gif') }}" alt="Click on the three dots of a playlist > Share > Copy Spotify URI">
+    </div>
+  </div>
+  <div class="container">
+    {% include "includes/analyseInput.html" %}
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+
+
+{% endblock %}

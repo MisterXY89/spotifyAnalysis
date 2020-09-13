@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="jumbo indexJumbo">
+  <h1>Is my music sad?</h1>
+  <p>
+    Let's find out! <br />
+    In order to use this service, please login with your spotify account :D
+  </p>
+  <form class="center" action="/login" method="get">
+    <button type="submit" class="_success">Login with Spotify*</button>
+  </form>
+</div>
+{% endblock %}
+{% block content %}
+<!-- NAVIGATIONS -->
+<div class="container indexContent">
+  <p>
+    *This service will be able to read all your playlists and saved songs in order to analyse them.
+    Additionaly you grant playlist write rights in order to create playlists for your top songs playlists.
+    <hr />
+    <strong>If you have any questions regarding the rights and the service, please open an issue on GitHub.</strong>
+  </p>
+</div>
+<video autoplay muted loop id="indexVideo">
+  <source src="{{ url_for('static', filename='img/startSky.mp4') }}" type="video/mp4">
+</video>
+{% endblock %}

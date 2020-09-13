@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="jumbo _white">
+  <h1>Feature Overview</h1>
+  <p>
+    Here are all the currently implemented features:
+  </p>
+</div>
+{% endblock %}
+{% block content %}
+
+
+<div class="card" style="width: 30%;">
+  <div class="-content _alignCenter">
+    <h3>Playlist & Track Analysis</h3>
+    <p>Analyse your playlists and tracks for their emotions via valence (and lyrics: ToDo)</p>
+    <a href="/analyse">
+      <button type="button" class="_small _info">Analyse</button>
+    </a>
+  </div>
+</div>
+
+<div class="card" style="width: 30%;">
+  <div class="-content _alignCenter">
+    <h3>Top songs</h3>
+    <p>Get all your top songs from different time spans and add them to a playlist. Optionally analyze the songs.</p>
+    <a href="/topsongs">
+      <button type="button" class="_small _info">Top Songs</button>
+    </a>
+  </div>
+</div>
+
+<div class="card" style="width: 30%;">
+  <div class="-content _alignCenter">
+    <h3>Happy & Sad Playlist creation</h3>
+    <p>Create most happy and sad playlists from your saved songs</p>
+    <a href="/overview">
+    <a href="/happy">
+      <button type="button" class="_small _info">Happy</button>
+    </a>
+    <br />
+    <a href="/sad">
+      <button type="button" class="_small _info">Sad</button>
+    </a> <br />
+  </div>
+</div>
+
+
+{% if login is defined %}
+<!-- SNACK -->
+<div id="loggedInBar" class="snackbar _success _box _shadow">
+    Logged in! <br />
+</div>
+{% endif %}
+
+{% endblock %}
+
+<!-- help -->
+<!-- <small>
+  If you weren't prompted a login screen then your browser remembered your login details and you were logged in automatically! <br />
+  If you don't want this, clear the cookies for this site or remove the acces from this app in your spotify account settings.
+</small> -->

@@ -60,8 +60,9 @@ footer {
   text-align: center;
   padding-top: 2em;
   padding-bottom: 2em;
-  background-color: #222;
-  color: #fff;
+  /* background-color: rgba(140,140,140,0.7); */
+  background-color: transparent;
+  color: #000;
 }
 
 .content {

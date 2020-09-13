@@ -121,8 +121,12 @@
 
   async function loadSongs() {
     let type = "{{ type }}";
+    let playlistLength = document.getElementById("playlistLength").value;
+    let songCollectionLimit = document.getElementById("songCollectionLimit").value;
+    let excludeInstrumentals = document.getElementById("excludeInstrumentals").value;
 
     console.log("loading songs!");
+
     fetch("/getSongs", {
       method: "post",
       headers: {
@@ -141,9 +145,9 @@
       return response.json();
     })
     .then(json => {
-      // console.log(json);
+      console.log(json);
       songs = json["songs"];
-      // console.log(songs);
+      console.log(songs);
       generateSongDisplayHtml(songs);
     })
     .catch(error => {

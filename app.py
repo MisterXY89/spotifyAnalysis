@@ -3,6 +3,7 @@ monkey.patch_all()
 
 import os
 import sys
+import json
 import time
 import spotipy
 # from gevent import monkey
@@ -65,13 +66,11 @@ def analyseGet():
 def songAnalysePost():
     if "trackURI" in request.form:
         uri = request.form["trackURI"]
-        songInfo = spotifyData.SpotifyData(session["spotifyAccessToken"]).getSongInfo(uri)
-        trackName = songInfo["trackName"]
-        artistName = songInfo["artistName"]
+        trackInfo = spotifyData.SpotifyData(session["spotifyAccessToken"]).getSongInfo(uri)
+        trackName = trackInfo["trackName"]
+        artistName = trackInfo["artistName"]
         if "analyseLyrics" in request.form and bool(request.form["analyseLyrics"]):
-            print(songInfo)
             lyrics = lyrics_.getLyricsForSong(trackName, artistName)
-            print(lyrics)
             if lyrics:
                 lyrics = altLyrics_.prepLyricsForSave(lyrics)
                 sent = sentimentAnalyzer_.songSent({
@@ -82,7 +81,7 @@ def songAnalysePost():
         valence = spotifyData.SpotifyData(session["spotifyAccessToken"]).getBasicValence([uri])
         print(valence)
 
-    return redirect(url_for("songAnalyseOutput", sent=sent, valence=valence))
+    return redirect(url_for("songAnalyseOutput", sentiment=sent, valence=valence, trackInfo=trackInfo))
 
 @app.route("/songAnalyse", methods=["GET"])
 def songAnalyse():
@@ -92,17 +91,36 @@ def songAnalyse():
 @app.route("/songAnalyseOutput")
 def songAnalyseOutput():
     args = request.args
-    if "sent" in args:
-        sent = args["sent"]
+    if "sentiment" in args:
+        sentiment = args["sentiment"]
+        sentiment = sentiment.replace("\'", "\"")
+        sentiment = json.loads(sentiment)
     else:
-        sent = False
+        sentiment = False
+    if "trackInfo" in request.args:
+        trackInfo = args["trackInfo"]
+        trackInfo = trackInfo.replace("\'", "\"")
+        trackInfo = json.loads(trackInfo)
+    else:
+        trackInfo = {}
     if "valence" in args:
         valence = args["valence"]
     else:
         valence = False
-    return render_template("result.html", valence=valence, type="track", )
+    emotion = "Error: Valence unset - try again please."
+    if valence:
+        if float(valence) > 0.4:
+            emotion = "happy"
+        else:
+            emotion = "sad"
+    if sentiment:
+        if float(sentiment["compound"]) > 0:
+            emotion+= " & happy lyrics"
+        else:
+            emotion+= " & sad/negative lyrics"
+        return render_template("result.html", valence=valence, type="track", sentiment=sentiment, name=trackInfo["trackName"], artist=trackInfo["artistName"], emotion=emotion, imgUrl=trackInfo["imgUrl"], isTrack=True)
     # return jsonify({
-    #     "sentimentData": sent,
+    #     "sentimentData": sentiment,
     #     "valence": valence
     # })
 
@@ -264,7 +282,7 @@ def getSongs():
     # else:
     #     reqSongs = sorted(tracks, key=lambda k: k['val'])[:playlistLength]
     return jsonify({
-        "songs": reqSongs,
+        "songs": tracks,
         "type": type
     })
 

@@ -13,14 +13,12 @@
       Your {{ type }} has a valence of: <code>{{ valence }}</code>.
     </p>
   {% endif %}
-
-  {% if showSent is sameas True %}
-    {% if sentiment is defined %}
-      <p class="_high text-center">
-        Your {{ type }} has a compound seniment score of: <code>{{ sentiment["compound"] }}</code>.
-      </p>
-    {% endif %}
-  {% else %}
+  {% if showSent|int > 0 %}
+    <p class="_high text-center">
+      Your {{ type }} has a compound seniment score of: <code>{{ sentiment["compound"] }}</code>.
+    </p>
+  {% endif %}
+  {% if showSent|int < 1 %}
   <p class="_high text-center">
       <b>No lyrics could be found for your track!</b>
   </p>
@@ -29,7 +27,7 @@
 {% endblock %}
 {% block content %}
   <div class="row margin">
-    {% if showSent is sameas True %}
+    {% if showSent|int > 0 %}
     {% if sentiment is defined %}
       <h2>Sentiment analysis results</h2>
       <table>

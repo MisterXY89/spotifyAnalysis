@@ -45,7 +45,7 @@ requests==2.23.0
 requests-oauthlib==1.3.0
 six==1.14.0
 soupsieve==2.0
-spacy==2.2.0
+spacy==2.2.2
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz
 spotipy==2.12.0
 srsly==1.0.2

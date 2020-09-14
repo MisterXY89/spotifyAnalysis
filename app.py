@@ -64,7 +64,7 @@ def analyseGet():
 
 @app.route("/songAnalyse", methods=["POST"])
 def songAnalysePost():
-    showSent = False;
+    showSent = 0
     sent = False
     if "trackURI" in request.form:
         uri = request.form["trackURI"]
@@ -74,9 +74,9 @@ def songAnalysePost():
         print(request.form["analyseLyrics"])
         if "analyseLyrics" in request.form and request.form["analyseLyrics"] == "on":
             try:
-                lyrics = altLyrics_.lyricsForSong(trackName, artistName)
+                # lyrics = altLyrics_.lyricsForSong(trackName, artistName)
                 # lyrics = lyrics_.getLyricsForSong(trackName, artistName)
-                # lyrics = lyrics_.getLyrics(trackName, artistName)
+                lyrics = lyrics_.getLyrics(trackName, artistName)
                 if lyrics:
                     lyrics = altLyrics_.prepLyricsForSave(lyrics)
                     sent = sentimentAnalyzer_.songSent({
@@ -84,17 +84,19 @@ def songAnalysePost():
                         "artist": artistName,
                         "lyrics": lyrics
                     })
-                    showSent = True
+                    showSent = 1
                 else:
                     sent = "Lyrics not found"
-                    showSent = False
+                    showSent = 0
             except Exception as e:
                 print("ERROR")
+                print(e)
                 sent = "Lyrics not found"
-                showSent = False
+                showSent = 0
 
         valence = spotifyData.SpotifyData(session["spotifyAccessToken"]).getBasicValence([uri])
-
+    print("FINAL showSent")
+    print(showSent)
     return redirect(url_for("songAnalyseOutput", showSent=showSent, sentiment=sent, valence=valence, trackInfo=trackInfo))
 
 @app.route("/songAnalyse", methods=["GET"])
@@ -106,16 +108,13 @@ def songAnalyse():
 def songAnalyseOutput():
     args = request.args
     showSent = args["showSent"]
-    if showSent == "True":
-        showSent = True
-    else:
-        showSent = False
+    showSent = int(showSent)
     if "sentiment" in args:
         sentiment = args["sentiment"]
         sentiment = sentiment.replace("\'", "\"")
         if showSent:
             sentiment = json.loads(sentiment)
-            showSent = False
+            showSent = 1
     else:
         sentiment = False
     if "trackInfo" in request.args:

@@ -35,6 +35,7 @@ preshed==3.0.2
 pymusixmatch==0.3
 pyparsing==2.4.7
 PySocks==1.7.1
+PyLyrics==1.1.0
 python-dateutil==2.8.1
 python-dotenv==0.13.0
 python-engineio==3.13.1

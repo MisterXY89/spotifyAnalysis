@@ -218,7 +218,7 @@ def result():
     if valence <= 0.52 and valence >= 0.48:
         emotion = "mixed"
 
-    return render_template("result.html", type=type, valence=valence, cssClass=cssClass, emotion=emotion, name=name, showPlaylists=True, pages=pages, pagination=True)
+    return render_template("result.html", showSent=0, type=type, valence=valence, cssClass=cssClass, emotion=emotion, name=name, showPlaylists=True, pages=pages, pagination=True)
 
 
 @app.route("/login")
@@ -383,7 +383,6 @@ def topSongs():
 
 
 @app.route("/")
-# @auth("default", "index")
 def index():
     global last_origin
     last_origin = "index"
